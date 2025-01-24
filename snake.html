@@ -86,8 +86,8 @@ function component(width, height, color, x, y, type) {
 
 function updateGameArea() {
     myGameArea.clear();
-
-    if (snake.x == food.x && food.y == snake.y) {
+//|| food.y > snake.y && snake.y < food.y + 20
+    if (snake.x > food.x && snake.x < food.x + 20 && food.y < snake.y && snake.y > food.y + 20 ) {
         score += 1;
         foodSpawn();
     }
@@ -118,8 +118,8 @@ function displayScore() {
 
 function foodSpawn()
 {
-    const x =  Math.floor(Math.random() * myGameArea.canvas.width);
-    const y =  Math.floor(Math.random() * myGameArea.canvas.width);
+    const x =  Math.floor(Math.random() * 365);
+    const y =  Math.floor(Math.random() * 265);
     food.x = x;
     food.y = y; 
     // food.update();
