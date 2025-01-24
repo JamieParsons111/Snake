@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>JP's Snake Game</title>
 <style>
@@ -32,23 +31,21 @@
 
 var snake;
 var food;
-var score;
+let score = 0;
 
 
 function startGame() {
     clearInterval(myGameArea.interval);
     snake = new component(30, 30, "blue", 150, 120);
     food = new component(20, 20, "red", 350, 110);
-    myscore = new component("30px", "Consolas", "black", 280, 40, "text");
-
     myGameArea.start();
 }
 
 var myGameArea = {
     canvas : document.createElement("canvas"),
     start : function() {
-        this.canvas.width = 480;
-        this.canvas.height = 270;
+        this.canvas.width = 400;
+        this.canvas.height = 300;
         this.context = this.canvas.getContext("2d");
         document.body.insertBefore(this.canvas, document.body.childNodes[0]);
         this.interval = setInterval(updateGameArea, 20);
@@ -58,13 +55,16 @@ var myGameArea = {
     window.addEventListener('keyup', function (e) {
       myGameArea.key = false;
     })
+    
     },
     clear : function() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 }
 
-function component(width, height, color, x, y) {
+
+function component(width, height, color, x, y, type) {
+    this.type = type;
     this.width = width;
     this.height = height;
     this.speedX = 0;
@@ -82,31 +82,55 @@ function component(width, height, color, x, y) {
     }    
 }
 
+
+
 function updateGameArea() {
     myGameArea.clear();
-    food.update();
 
-    if (myGameArea.key && myGameArea.key == 37) {moveleft(); }
-    if (myGameArea.key && myGameArea.key == 39) { moveright();}
-    if (myGameArea.key && myGameArea.key == 38) {moveup(); } 
-    if (myGameArea.key && myGameArea.key == 40) {movedown(); }
+    if (snake.x == food.x && food.y == snake.y) {
+        score += 1;
+        foodSpawn();
+    }
+
+    food.update();
+    displayScore();
+    if (myGameArea.key && myGameArea.key == 37) {moveleft();}
+    if (myGameArea.key && myGameArea.key == 39) {moveright();}
+    if (myGameArea.key && myGameArea.key == 38) {moveup();} 
+    if (myGameArea.key && myGameArea.key == 40) {movedown();}
 
     gameOver();
-    
-    if (snake.x == food.x && snake.y == food.y) {
-        alert("You ate the food!");
-        score += 1;
-        
-    }
-    // myScore.text = "SCORE: " + score;
+   
+
     snake.newPos();    
     snake.update();
+}
 
+function displayScore() {
+    myGameArea.context.fillStyle = '#000000';
+    myGameArea.context.font = '24px Arial';
+    myGameArea.context.textAlign = 'left';
+    myGameArea.context.fillText('Score: ' + score, 1, 25)
+}
+
+
+
+
+function foodSpawn()
+{
+    const x =  Math.floor(Math.random() * myGameArea.canvas.width);
+    const y =  Math.floor(Math.random() * myGameArea.canvas.width);
+    food.x = x;
+    food.y = y; 
+    // food.update();
 }
 
 function gameOver() {
-    if (snake.x < 0 || snake.y < 0 || snake.x > myGameArea.canvas.width || snake.y > myGameArea.canvas.height) {
+    if (snake.x < 0 || snake.y < 0 || 
+        snake.x >= 375 || 
+        snake.y >= 275)  {
         alert("Game Over! You hit the wall!");
+
         startGame();
     }
 }
@@ -138,3 +162,4 @@ function moveright() {
 <p>Move your snake with the arrow keys</p>
 </body>
 </html>
+
