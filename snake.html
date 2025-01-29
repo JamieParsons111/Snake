@@ -86,8 +86,7 @@ function component(width, height, color, x, y, type) {
 
 function updateGameArea() {
     myGameArea.clear();
-//|| food.y > snake.y && snake.y < food.y + 20
-    if (snake.x > food.x && snake.x < food.x + 20 && food.y < snake.y && snake.y > food.y + 20 ) {
+    if (snake.x + 20 > food.x  && snake.x < food.x + 20  && snake.y < food.y + 20 && snake.y + 20 > food.y) {
         score += 1;
         foodSpawn();
     }
@@ -106,6 +105,8 @@ function updateGameArea() {
     snake.update();
 }
 
+
+
 function displayScore() {
     myGameArea.context.fillStyle = '#000000';
     myGameArea.context.font = '24px Arial';
@@ -122,7 +123,6 @@ function foodSpawn()
     const y =  Math.floor(Math.random() * 265);
     food.x = x;
     food.y = y; 
-    // food.update();
 }
 
 function gameOver() {
