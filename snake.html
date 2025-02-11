@@ -14,12 +14,9 @@
     }
 
     h1 {
-        text-align: center;
+        text-align: left;
         font-family: Arial, sans-serif;
-        margin-top: 10px; 
-        padding: 20;
-        
-
+        margin-top: 20px; 
         color: #000000;
     }   
 </style>
@@ -32,8 +29,8 @@
     <script>
 
 
-let snake;                                                
-let direction = 'right';
+var snake;
+var food;
 let score = 0;
 
 
@@ -50,8 +47,8 @@ var myGameArea = {
         this.canvas.width = 400;
         this.canvas.height = 300;
         this.context = this.canvas.getContext("2d");
-        document.body.insertBefore(this.canvas, document.body.childNodes[1]);
-        this.interval = setInterval(updateGameArea, 20);                      
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+        this.interval = setInterval(updateGameArea, 20);
         window.addEventListener('keydown', function (e) {
         myGameArea.key = e.keyCode;
     })
@@ -65,6 +62,7 @@ var myGameArea = {
     }
 }
 
+
 function component(width, height, color, x, y, type) {
     this.type = type;
     this.width = width;
@@ -73,13 +71,10 @@ function component(width, height, color, x, y, type) {
     this.speedY = 0;
     this.x = x;    
     this.y = y;    
-    this.body = [{x : this.x, y : this.y} ];                                     // array of body parts
-    this.update = function() {                                                  // draw the snake
-        ctx = myGameArea.context;                                               // get the context
-        ctx.fillStyle = color;                                                  // set the color
-        this.body.forEach(body_part => {                                        // draw each body part
-            ctx.fillRect(body_part.x, body_part.y, this.width, this.height);    // draw a rectangle
-        });
+    this.update = function() {
+        ctx = myGameArea.context;
+        ctx.fillStyle = color;
+        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
     this.newPos = function() {
         this.x += this.speedX;
@@ -88,14 +83,9 @@ function component(width, height, color, x, y, type) {
 }
 
 
+
 function updateGameArea() {
     myGameArea.clear();
-    moveSnake();
-    if (myGameArea.key && myGameArea.key == 37) {direction = "left";}                   //  move the snake
-    if (myGameArea.key && myGameArea.key == 39) {direction = "right"}
-    if (myGameArea.key && myGameArea.key == 38) {direction = "up";} 
-    if (myGameArea.key && myGameArea.key == 40) {direction = "down";}
-
     if (snake.x + 20 > food.x  && snake.x < food.x + 20  && snake.y < food.y + 20 && snake.y + 20 > food.y) {
         score += 1;
         foodSpawn();
@@ -103,7 +93,10 @@ function updateGameArea() {
 
     food.update();
     displayScore();
- 
+    if (myGameArea.key && myGameArea.key == 37) {moveleft();}
+    if (myGameArea.key && myGameArea.key == 39) {moveright();}
+    if (myGameArea.key && myGameArea.key == 38) {moveup();} 
+    if (myGameArea.key && myGameArea.key == 40) {movedown();}
 
     gameOver();
    
@@ -120,6 +113,8 @@ function displayScore() {
     myGameArea.context.textAlign = 'left';
     myGameArea.context.fillText('Score: ' + score, 1, 25)
 }
+
+
 
 
 function foodSpawn()
@@ -140,49 +135,30 @@ function gameOver() {
     }
 }
 
-function moveSnake(){
 
-if (direction == 'right'){
-    snake.body[0].x ++;
-}
-if (direction == 'left'){
-    snake.body[0].x --;
-}   
-if (direction == 'up'){
-    snake.body[0].y --;
-}   
-if (direction == 'down'){
-    snake.body[0].y ++;
+
+function moveup() {
+    snake.speedY = -1; 
+    snake.speedX = 0;
 }
 
-
-
-snake.body.unshift(snake);
-
+function movedown() {
+    snake.speedY = 1; 
+    snake.speedX = 0;
 }
 
-// function moveup() {
-//     snake.speedY = -1; 
-//     snake.speedX = 0;
-// }
+function moveleft() {
+    snake.speedX = -1; 
+    snake.speedY = 0;
+}
 
-// function movedown() {
-//     snake.speedY = 1; 
-//     snake.speedX = 0;
-// }
-
-// function moveleft() {
-//     snake.speedX = -1; 
-//     snake.speedY = 0;
-// }
-
-// function moveright() {
-//     snake.speedX = 1; 
-//     snake.speedY = 0;
-// }
+function moveright() {
+    snake.speedX = 1; 
+    snake.speedY = 0;
+}
 
 </script>
 
-<p>Move your snake with the arrow keys </p>
+<p>Move your snake with the arrow keys</p>
 </body>
 </html>
