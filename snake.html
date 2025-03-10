@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,7 +45,7 @@ let snakesize = 20;
 */
 function startGame() {
     clearInterval(myGameArea.interval);                         
-    snake = new snake_component(25, 25, "blue", 180, 120);   
+    snake = new snake_component(20, 20, "blue", 180, 120);   
     food = new food_component(20, 20, "red", 350, 110);
 
     myGameArea.start();                                         
@@ -161,7 +164,7 @@ function moveSnake(){
 
     head = {x : snake.body[0].x, y : snake.body[0].y};    // Store the x and y coordinates of head in variable
 
-    console.log( "Snake Body length before: " + snake.body );
+    console.log( "Snake Body length before: " + JSON.stringify(snake.body ));
     if (direction == 'right'){
         head.x ++;
     }
@@ -209,7 +212,7 @@ function gameOver() {
         head.x >= 375 || 
         head.y >= 275)  {
         alert("Game Over! You hit the wall!");
-
+        score = 0;
         startGame();
     }
 }
